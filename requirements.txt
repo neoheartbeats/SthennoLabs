@@ -1,0 +1,4 @@
+requests
+types-requests
+python-dotenv
+python-telegram-bot
