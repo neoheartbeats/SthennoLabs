@@ -1,6 +1,3 @@
-# 6730140051:AAGRK7sC-5wnvM5ArfLqmVZv-xL9CIBntE8
-# pylint: disable=unused-argument
-
 from telegram import Update
 from telegram.ext import (
     filters,
