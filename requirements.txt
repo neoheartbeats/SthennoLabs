@@ -1,4 +1,6 @@
 requests
 types-requests
+openai
+tiktoken
 python-dotenv
 python-telegram-bot

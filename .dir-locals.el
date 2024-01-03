@@ -1,1 +1,1 @@
-((python-mode . ((python-shell-interpreter . "./venv/bin/python"))))
+((python-ts-mode . ((python-shell-interpreter . "./venv/bin/python"))))
