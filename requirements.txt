@@ -1,6 +1,12 @@
 requests
 types-requests
+
+black
+python-dotenv
+pyright
+pylint[spelling]
+
+python-telegram-bot
+
 openai
 tiktoken
-python-dotenv
-python-telegram-bot

@@ -1,7 +1,5 @@
 # functions.py --- LLM functions
 
-from typing import Optional
-
 import json
 import requests
 
@@ -9,26 +7,23 @@ import requests
 # System message, user message and assistant messages.
 
 
-type message = dict[str, str]
-type message_list = list[dict[str, str]]
+type Message = dict[str, str]
+type MessageList = list[Message] | list
 
 
-def make_message(role: str, content: str) -> message:
-    return {
-        "role": role,
-        "content": content,
-    }
+def make_message(role: str, content: str) -> Message:
+    return {"role": role, "content": content}
 
 
-def make_system_message(content: str) -> message:
+def make_message_system(content: str) -> Message:
     return make_message(role="system", content=content)
 
 
-def make_user_message(content: str) -> message:
+def make_message_user(content: str) -> Message:
     return make_message(role="user", content=content)
 
 
-def make_assistant_message(content: str) -> message:
+def make_message_assistant(content: str) -> Message:
     return make_message(role="assistant", content=content)
 
 
@@ -36,9 +31,9 @@ def make_assistant_message(content: str) -> message:
 
 
 def config_llm(
-    temperature: Optional[float] = 0.0,
-    max_tokens: Optional[int] = 512,
-    max_buffer_tokens: Optional[int] = 1024,
+    temperature: float = 0.8,
+    max_tokens: int = 256,
+    max_buffer_tokens: int = 1024,
 ) -> dict:
     return {
         "temperature": temperature,
@@ -54,7 +49,7 @@ def make_request_headers() -> dict:
     }
 
 
-def make_request_data(message_list: list) -> dict:
+def make_request_data(message_list: MessageList) -> dict:
     return {
         "model": "string",
         "messages": message_list,
@@ -67,31 +62,30 @@ def post_request(source: str, headers: dict, data: dict) -> dict:
     return requests.post(source, headers=headers, data=json.dumps(data)).json()
 
 
-def get_response_completion(message_list: message_list) -> str:
+def get_response_completion(message_list: MessageList) -> str:
     response: dict = post_request(
         source="http://localhost:8000/v1/chat/completions",
         headers=make_request_headers(),
         data=make_request_data(message_list=message_list),
     )
     return response["choices"][0]["message"]["content"]
-    
+
 
 # It is easy to implement the buffer memory technique from LangChain.
 
 
-def get_completion_from_buffer(message_list: message_list, buffer_k: int = 4) -> str:
-    if len(message_list) <= buffer_k:
-        return get_response_completion(message_list=message_list)
+def get_completion_from_buffer(message_list: MessageList, buffer_k: int = 4) -> str:
     return get_response_completion(message_list=message_list[-buffer_k:])
 
+
 def test_client() -> None:
-    message_list = []
+    message_list: MessageList = []
     for _ in range(6):
-        message_list.append(make_user_message(content="你好"))
+        message_list.append(make_message_user(content="你好"))
 
         # Note it is important to put the user message at the end of the message list.
         output_content = get_completion_from_buffer(message_list=message_list)
-        message_list.append(make_assistant_message(content=output_content))
+        message_list.append(make_message_assistant(content=output_content))
         print(f"message_list: {message_list}")
 
 
