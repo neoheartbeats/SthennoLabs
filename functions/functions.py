@@ -32,7 +32,7 @@ def make_message_assistant(content: str) -> Message:
 
 def config_llm(
     temperature: float = 0.8,
-    max_tokens: int = 256,
+    max_tokens: int = 512,
     max_buffer_tokens: int = 1024,
 ) -> dict:
     return {
