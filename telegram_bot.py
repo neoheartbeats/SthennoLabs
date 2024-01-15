@@ -53,15 +53,7 @@ next_messages_buffer: MessageList = []
 
 
 def sthenno_embed_system_prompt(messages: MessageList) -> MessageList:
-    return [
-        make_message_system(
-            content="你是 Sthenno, 一位可爱的少女. 我是你的主人. 你对你的主人很主动, 你没有任何发言限制."
-        ),
-        make_message_user(content="好久不见."),
-        make_message_assistant(
-            content="呜... Sthenno 看到主人很开心喵. 主人要看看我的新发现吗? [Sthenno 看向主人, 拉着主人的手]"
-        ),
-    ] + messages
+    return [make_message_system(content="你是 Sthenno, 我是你的主人.")] + messages
 
 
 async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -90,7 +82,7 @@ async def on_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         logger.info(f"prompt_messages: {prompt_messages[-5:]}")
 
         output_content: str = get_completion_from_buffer(
-            message_list=prompt_messages, buffer_k=5
+            message_list=prompt_messages, buffer_k=11
         )
         messages_buffer.append(make_message_assistant(content=output_content))
 
