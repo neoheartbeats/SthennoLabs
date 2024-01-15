@@ -153,4 +153,7 @@ cython_debug/
 /.DS_Store
 
 # Custom
-./collections*
+./collections.json
+./collections_dpo.json
+/collections.json
+/collections_dpo.json
